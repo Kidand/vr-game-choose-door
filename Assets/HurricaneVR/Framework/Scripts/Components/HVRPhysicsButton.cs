@@ -180,6 +180,7 @@ namespace HurricaneVR.Framework.Components
             }
 
             ButtonDown.Invoke(this);
+            GameStartEvent.Invoke();
         }
 
         protected virtual void OnButtonUp()
@@ -190,7 +191,11 @@ namespace HurricaneVR.Framework.Components
             }
             ButtonUp.Invoke(this);
         }
+
+        [Header("Game Events")]
+        public UnityEvent GameStartEvent;
     }
+
 
     [Serializable]
     public class HVRButtonEvent : UnityEvent<HVRPhysicsButton> { }
