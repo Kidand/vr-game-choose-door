@@ -1,0 +1,76 @@
+## 1.3.0 - Bug Fixing Patch
+- Added Documentation XMLs so that our documentation actually shows up when working in an editor (Documentation is still a work in progress).
+- Fixed a large number of bugs reported by users - most of which deal with overlapping/coincident polygons or other odd cases. 
+- Tightened some epsilons to handle close movement (Previous Poseidons would only trigger if you moved them more than 0.001, now it is set to 0.0001)
+- Added Poseidon Inspector context menu item to "Remove and Revert Mesh" - for cases where you want to basically undo a Poseidon's effects and get rid of it for good
+- Added Example Scene 7 to showcase "placing intersecting objects" dynamically at runtime
+- Runtime: Converted a few slow lag spikes during carving to have proper asynchronous support in order to better respect carving time-budget  
+
+Bug Fixes
+- Coincidence Fix: Added Conormality (triangles pointing the same way) to the definition of coincident polygons (previously, overlapping triangles pointing in opposite directions would be classified incorrectly). 
+- Coincidence Fix: Fixed issues where "roof" polygons were being wrongly classified as "outside" due to raycasting issues.
+- Coincidence Fix: Fixed an issue where where axis aligned coincident triangles could not correctly decide if they were inside or outside. 
+- Fixed three separate issues around coincident polygons
+- Added support for large meshes (greater than 65535 vertices). Previously, meshes with large numbers of vertices would explode due to index overflow. Large meshes will now use 32-bit index format, so they will take up twice as much disk space to store the final carve.
+- Meshes with extremely tiny triangles now properly carve  
+- Fixed annoying error message about "ProgressId -1 not existing" on Unity 2020.1 and later.
+
+*** 1.2.0 - Layered Mode & Hole Patching 
+
+New Features & Changes
+- Added Layered Mode as an official global Poseidon mode
+- Now supports both inward and outward facing geometry in all modes!
+- Removed Legacy mode and legacy operations from libraries
+- Made it so that Outward Facing Objects take precedence over inward objects on the same layer. 
+- Added "Protrude Mode" advanced property for odd complicated scenarios involving 3+ objects with different facings.  
+- Changed carving across multiple layers to prune triangles only after handling groups of carvers. This cleans up situations where polygons of a carver were missing after carving multiple objects.
+- Added a "Mark Entire Active Scene as Dirty" button in the Poseidon Preferences for situations where you may want to recompute an entire scene.
+- Added a "Rebuild Poseidon" option to the Poseidon Inspector context menu to force a single rebuild.
+
+Bug Fixes
+- Fixed issues where floating polygons would appear when carving complicated meshes
+- Fixed subtle issues where tiny holes might appear in geometry with complex meshes
+- Fixed issues with async progress bar showing up at wrong times and never clearing on older versions of Unity 
+- Fixed a bug where some hierarchy crawling code was running at Runtime and causing performance degradations in large scenes with runtime hierarchy changes
+- Fixed an issue where in some cases, the Poseidon's dirty flag would never clear and the object would rebuild forever once dirtied
+
+*** 1.1.0 - Runtime Support & Asynchronous Carving
+
+New Features:
+- Reworked entire underlying architecture to support a cleaner, stage-based logic that should be more stable and run significantly faster.
+- Now Supports Asynchronous Carving, where the carving of Poseidons now occurs in a frame-divided way. This no longer freezes the editor when doing expensive carves, but lets you continue to work while carving happens in the background. 
+- An initial simple release of Runtime Support, build atop the new asynchronous carving system, where users can manually create a carve operation at runtime, specifying a frame budget, and being able to run it themselves.
+- Added experimental support for Inward and Outward Facing Poseidons using a Layered Mode (still experimental, may be greatly changed/replaced in the future). 
+
+Other Improvements / Additions: 
+- Added Example Scene 5 - Runtime Support to showcase running the Poseidon carves at runtime.
+- Added Example Scene 6 to show potential carves using the Layered Mode
+- Many, many performance improvements.
+- Progress: Created cleaner Progress reporting classes, and found ways to smooth out progress tracking.
+- Inspector: Added an additional UI warning to notify users if a Poseidon's mesh isn't Read-Write Enabled.
+- Unity 2019.x: Added support for the bottom right Async Progress Bar. Deprecated old modal progress bar. 
+- Unity 2020.x: Added support for Background Task / Progress bar window
+- Inspector: Added a Log All Rebuilds button to the Tools section.
+- Fixed a bug where "disabled" objects would still carve against enabled carvers. 
+- Fixed a bug where Poseidons would freak out when loading scenes where MeshFilters no longer had valid meshes. 
+
+Known Bugs: 
+- Asynchronous Carving doesn't reset the current editor carve if you continue to change objects. It will eventually catch up to where you are, but it might look weird if you turn off deferred mode. 
+
+Upgrading: 
+Should be forward compatible with older versions. 
+
+
+*** 1.0.2 - 2020.x Patch (Not Released Publicly)
+Added compatibility for Unity 2020.x builds. 
+
+
+
+*** 1.0.1 - 2019.3 Patch
+
+Minor release to improve architectural changes, fixing issues with flat UI in 2019.3 and a few minor bug fixes.
+
+
+
+*** 1.0 January 29th, 2020
+Initial Release 

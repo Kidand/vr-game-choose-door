@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinderflame.Poseidon.Editor</name>
+    </assembly>
+    <members>
+        <member name="T:Cinderflame.Poseidon.AsyncProgressor">
+             <summary>
+             Represents the Editor-time operations progress as
+             a service that spits out the data to any listeners.
+            
+             In the future, we may add more layer granularity to the
+             Async Progressor, but for now, this will do for an MVP.
+             </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonOutliner">
+            <summary>
+            Responsible for drawing fancy wireframe outlines around Poseidon objects when they're selected.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.BoolPref.Draw(UnityEngine.GUIContent,System.Boolean,UnityEngine.GUIStyle)">
+            <summary>
+            Draws self in whatever UI it is being invoked from
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.EditorPref`1.Clear">
+            <summary>
+            Deletes the key from the registry.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Artemis">
+            <summary>
+            Greek goddess of the forest is Artemis. 
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Atlas">
+            <summary>
+            A class whose simple job is to go through all of the provided Poseidons, 
+            and decide which of them actually need to be updated on this frame. 
+            
+            After that, it runs a preprocess step, which prepares the Poseidons for 
+            eventual use. 
+            
+            Historically, this was one monolithic file, but it has now been extracted
+            out in order to keep the logic of decision making in one simple place.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.DirtyChangeValidator">
+            <summary>
+            Special validator that checks if the Poseidon has actually 
+            been removed. This allows us to register it for deletion
+            from the poseidon registry.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.MeshChangeValidator">
+            <summary>
+            Special validator that checks if the Poseidon has actually 
+            been removed. This allows us to register it for deletion
+            from the poseidon registry.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.MeshChangeValidator.HaveMeshContentsChanged(Cinderflame.Poseidon.PoseidonState)">
+            <summary>
+            Right now, we don't have a clean way of determining if the mesh contents have changed. 
+            So we just do it based on vertex count.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.RemovedValidator">
+            <summary>
+            Special validator that checks if the Poseidon has actually 
+            been removed. This allows us to register it for deletion
+            from the poseidon registry.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.StatusChangeValidator">
+            <summary>
+            Special validator that checks if the Poseidon has actually 
+            been removed. This allows us to register it for deletion
+            from the poseidon registry.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.TransformValidator">
+            <summary>
+            Special validator that checks if the Poseidon has actually 
+            been removed. This allows us to register it for deletion
+            from the poseidon registry.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.Zeus.TickRunner">
+            <summary>
+            Invoke this in order to run the automatic editor 
+            runner on your own basis, for example, if all rebuilds
+            are frozen and you want to diagnose/profile a specific 
+            moment or frame of the runner's invocation.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.Zeus.Cancel(Cinderflame.Poseidon.CancellationSource)">
+            <summary>
+            This will have unexpected results.
+            </summary>
+        </member>
+    </members>
+</doc>

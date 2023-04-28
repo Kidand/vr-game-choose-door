@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinderflame.Poseidon</name>
+    </assembly>
+    <members>
+        <member name="T:Cinderflame.Poseidon.CarveScope">
+            <summary>
+            Where is this current Poseidon being used? 
+            Currently not used, but will be once we start
+            adding options for automating the Poseidon runtime environment.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveScope.Editor">
+            <summary>
+            This Poseidon should only ever carve in the
+            editor and will never be carved at runtime. 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveScope.EditorAndRuntime">
+            <summary>
+            This Poseidon will automatically be carved
+            in the editor but can be processed by runtime
+            operations as well.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Configuration">
+            <summary>
+            <para>
+            Represents basic configurable elements on a Poseidon.
+            This makes it a lot easier for us to check if the overall
+            configuration changed without individually validating every
+            element at the "change-check" level.  
+            </para>
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Configuration.SubMeshSettings">
+            <summary>
+            The list of SubmeshSettings on the current Poseidon.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.Configuration.AreSubmeshSettingsDifferent(System.Collections.Generic.List{Cinderflame.Poseidon.SubmeshSettings})">
+            <summary>
+            Is it that case that any of the properties
+            of the submesh settings have been changed?
+            </summary>
+            <param name="other">The submesh settings </param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinderflame.Poseidon.Configuration.Compare(Cinderflame.Poseidon.Configuration)">
+            <summary>
+            Compares two configurations to find out what class of
+            properties has changed between the two of them. Does this
+            warrant a full rebuild of all my sisters or just myself?
+            </summary>
+            <param name="other"></param>
+            <returns>A specific <see cref="T:Cinderflame.Poseidon.Configuration.ConfigurationTypeChange"/> that
+            specifies whether it was an internal property or an external property
+            that changed, or if there is no difference between the two configurations.</returns>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Configuration.ConfigurationTypeChange">
+            <summary>
+            What has actually changed in a configuration? 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Configuration.ConfigurationTypeChange.None">
+            Affects nothing / No difference
+        </member>
+        <member name="F:Cinderflame.Poseidon.Configuration.ConfigurationTypeChange.Internal">
+            Affects only self. Don't modify sisters.
+        </member>
+        <member name="F:Cinderflame.Poseidon.Configuration.ConfigurationTypeChange.External">
+            Affects the carve itself.
+        </member>
+        <member name="T:Cinderflame.Poseidon.Constants">
+            <summary>
+            Constants for Poseidon system.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Constants.RESULTANT_MESH_NAME">
+            <summary>
+            What name should we give meshes when they are created?
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Constants.EPSILON">
+            <summary>
+            A number used for most floating point comparisons.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Constants.EPSILON_PRECISE">
+            <summary>
+            An epsilon value used for more precise comparisons,
+            or when comparing Square Distances. 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Constants.STRATEGY_VERT_THRESHOLD">
+             <summary>
+             Represents the number of triangles at which point an "Auto"
+             Poseidon shifts from "Brutus" to "Octresius". The actual logic
+             is a bit more complicated. We actually figure out if "the number
+             of triangles" in the current carve + the triangles in Poseidon
+             we're carving against is greater than this number.
+            
+             If the number's ever greater, it will likely be faster to switch
+             to the Octresius strategy. 
+             </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Facing">
+            <summary>
+            A list of all types of CSG operations that can be performed by a CSGStrategy.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Facing.Inward">
+            <summary>
+            The mesh faces inward - it represents something like a room, or a tunnel
+            or a space that has walls facing toward you. 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.Facing.Outward">
+            <summary>
+            The mesh faces outward - this represents a 'filled' object, like a mountain,
+            or a piece of terrain that can be carved out of. 
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.CSGStrategies">
+            <summary>
+            Which strategy should we use for carving this Poseidon?
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CSGStrategies.Auto">
+            <summary>
+            Let the system figure it out. In this case, if the carve
+            is going to involve more than <see cref="F:Cinderflame.Poseidon.Constants.STRATEGY_VERT_THRESHOLD"/> triangles
+            carving one another, then we will likely switch to Octresius.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CSGStrategies.Brutus">
+             <summary>
+             A brute-force algorithm that just takes every triangle of your current mesh
+             and manually checks to see if it intersects every triangle of the opposite mesh.
+            
+             Works fine on small meshes because there's little geometry to compare, but can
+             get a bit tedious on larger meshes, which is when it might be prudent to use
+             some sort of pruning strategy, like Octresius to decide if triangles intersect each other.
+             </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CSGStrategies.Octresius">
+             <summary>
+             Constructs an Octree before trying to figure out if triangles carve one another.
+            
+             This algorithm technically runs faster, but has an up-front cost to constructing
+             the Octree - basically, if your mesh is complicated, use this - otherwise, use <see cref="F:Cinderflame.Poseidon.CSGStrategies.Brutus"/>.
+             </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.MeshCache">
+             <summary>
+             Contains a reference to the mesh that was
+             in the object on the previous frame, so that
+             we can use this to see if the user has swapped out
+             the mesh in the Poseidon.
+            
+             Also stores some basic attributes such as VertexCount
+             and SubmeshCount so that we can check if the underlying
+             mesh has changed (ie. the user has edited the mesh in a
+             3D modeler and added some vertices / submeshes).
+             </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.MeshCache.PreviousMesh">
+            <summary>
+            What was the mesh on the previous frame? In most cases, this
+            should never change unless the user manually swaps out the <see cref="F:Cinderflame.Poseidon.PoseidonBase.BaseMesh"/> property.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.MeshCache.VertexCount">
+            <summary>
+            The last time that Poseidon checked the Mesh, how many vertices did it have?
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.MeshCache.SubmeshCount">
+            <summary>
+            The last time the Poseidon system checked this mesh, how many submeshes did it have?
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonBase">
+             <summary>
+            	This data object represents that current state of a Poseidon in a scene.
+            
+             This is the most important MonoBehaviour (or, rather, its implementation),
+             as this is what the entire CSG is carving.
+            
+             However, this class does nothing except store its own state, and "previous"
+             state so that we can use that to determine if something has changed.
+             </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonBase.IsPrefabMode">
+            <summary>
+            Since Poseidon can support older versions of Unity less than 2018.3,
+            we need a way to let the implementation version of Poseidon tell us
+            if we're currently inside of a Prefab context.
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.PoseidonBase.FullName">
+            <summary>
+            Gets the full hierarchical path to the Poseidon
+            from root all the way to itself. This is useful
+            if you have 1000 objects named `Carver` in your scene.
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.PoseidonBase.DisplayName">
+            <summary>
+            Let the Poseidon implementation tell us how it should be displayed
+            so that we can defer some things to different versions of Unity.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonRegistry">
+            <summary>
+            Acts as an intermediary between the Poseidon itself and the main registry
+            So that we can get poseidons that are instantiated at runtime.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonRegistry.ForceRegisterAllScenePoseidons(UnityEngine.SceneManagement.Scene)">
+            <summary>
+            Used on scene changes to re-register poseidons. When we change active scenes
+            we want to make sure that all poseidons forcefully reregister themselves.
+            This is because when we change which is the active scene, we want to tell 
+            all of the poseidons that it is now their turn to be enabled.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.SubmeshSettings">
+             <summary>
+             A Structure that represents the current state of
+             properties associated with a given Submesh of a mesh.
+            
+             These are mostly used to update UV settings for submeshes
+             and whether or not a specific submesh needs to use
+             default UVs or UVs defined by these specific attributes.
+             </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.SubmeshSettings.UVSpace">
+            <summary>
+            The serialized value of the current UV Strategy /
+            UV Space for the current submesh.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.SubmeshSettings.UVStrategy">
+            <summary>
+            A representation of what UV modifications
+            should be made to a particular submesh
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.SubmeshSettings.UVStrategy.Imported">
+            Use the default UVs the mesh came with
+        </member>
+        <member name="F:Cinderflame.Poseidon.SubmeshSettings.UVStrategy.WorldSpace">
+            Enable Poseidon's Worldspace UV rewriting where
+            we attempt to create seamless transitions when meshes merge. 
+        </member>
+        <member name="T:Cinderflame.Poseidon.SubmeshSettings.Projection">
+            <summary>
+            When using Worldspace, should we project across
+            all three cardinal axes, or only a specific one?
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.SubmeshSettings.CompareContents(Cinderflame.Poseidon.SubmeshSettings)">
+            <summary>
+            Don't feel like overriding Equals, but I need
+            to check if the contents of two of these are the 
+            same or not.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.TreeCache">
+            <summary>
+            Represents a cache of where the current Poseidon
+            is in the hierarchy tree, which can be used to see
+            if the "Current Parent" is different from the <see cref="F:Cinderflame.Poseidon.TreeCache.PreviousParent"/>
+            and if the current sibling index is different from <see cref="F:Cinderflame.Poseidon.TreeCache.PreviousSiblingIndex"/>
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.TreeCache.PreviousParent">
+            <summary>
+            What was this object's previous parent poseidon, if any? 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.TreeCache.PreviousSiblingIndex">
+            <summary>
+            Where was this object in its sibling index?
+            For instance, if a parent Poseidon has two children,
+            is this the first or the second child? 
+            </summary>
+        </member>
+    </members>
+</doc>

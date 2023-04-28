@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinderflame.Trees</name>
+    </assembly>
+    <members>
+        <member name="T:Cinderflame.Trees.OctreeNode`2">
+            <summary>
+            Represents a node in an octree.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.Divide">
+            <summary>
+            Splits this octree node into 8 other nodes that are automatically added to the tree, parented to this node.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.Undivide">
+            <summary>
+            Called to delete the children of this node (and their children, etc).
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.GetDeepestChildContainingPoint(UnityEngine.Vector3)">
+            <summary>
+            Recursively calls GetChildContainingPoint until the deepest possible child is found containing the given
+            point.
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.GetChildContainingPoint(UnityEngine.Vector3)">
+            <summary>
+            Returns the one (out of 8) child that contains the given point.
+            For a recursive version of this, use GetDeepestChildContainingPoint.
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.GetIndexOfChildContainingPoint(UnityEngine.Vector3)">
+            <summary>
+            Gets the index of the child in the children array that contains the given point.
+            </summary>
+            <param name="point"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeNode`2.RecomputeBounds">
+            <summary>
+            Called to recompute the bounds of this specific OctreeNode.
+            You usually don't have to call this yourself.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Trees.OctreeRaytracer`2">
+            <summary>
+            Performs the actual raytracing functionality for Octrees.
+            This class is used internally by <see cref="!:Octree.Raytrace(Ray, System.Action&lt;U&gt;)"/>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="U"></typeparam>
+        </member>
+        <member name="T:Cinderflame.Trees.OctreeSerializer`2">
+            <summary>
+            Responsible for serializing and deserializing Octrees and OctreeNodes
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeSerializer`2.SerializeTree(Cinderflame.Trees.Octree{`0,`1})">
+            <summary>
+            Called to perform OnBeforeSerialize stuff for an Octree.
+            </summary>
+            <param name="tree"></param>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeSerializer`2.DeserializeTree(Cinderflame.Trees.Octree{`0,`1})">
+            <summary>
+            Called to perform OnPostDeserialize stuff for an Octree.
+            </summary>
+            <param name="tree"></param>
+        </member>
+        <member name="M:Cinderflame.Trees.OctreeSerializer`2.SerializeTreeNode(`1)">
+            <summary>
+            Called to perform OnBeforeSerialize stuff for a particular OctreeNode.
+            </summary>
+            <param name="node"></param>
+        </member>
+    </members>
+</doc>

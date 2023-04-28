@@ -1,0 +1,436 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cinderflame.Poseidon.CSG</name>
+    </assembly>
+    <members>
+        <member name="T:Cinderflame.Poseidon.UnsupportedStrategyException">
+            <summary>
+            Throw this when a stage has exceeded the allotted maxExecutionTime and
+            isn't yet finished doing its work.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Drawing">
+            <summary>
+            These methods are used when debugging things. They are 
+            helpers to make it easier to find a specific triangle or 
+            a specific bounds, or whatever it might be.
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.GeometryOctree.SistersBuilt">
+            <summary>
+            Whether or not the Octree node sisters are up to date.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.Kdop26.EncapsulateBounds(UnityEngine.Bounds)">
+            <summary>
+            Beware, all ye who enter here
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.LiveMesh">
+            <summary>
+            A better representation for mesh data that allows easier manipulation of triangles.
+            Convertible to and from Unity's Mesh objects.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.LiveMesh.CommitCarveOperations">
+            <summary>
+            Flattens the entire livemesh after carve operations.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.LiveMesh.IsPointCoincidentWithOtherTriangles(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            We define coincidence as being "on" the other triangle
+            but also facing in the same direction. 
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.LiveMeshPolygonReducer">
+            <summary>
+            Performs a polygon-reduce operation on a LiveMesh.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.LiveMeshPolygonReducer.ReducePolygons">
+            <summary>
+            Called to perform the actual polygon reduction.
+            </summary>
+            <returns>Number of polygons removed by the operation.</returns>
+        </member>
+        <member name="T:Cinderflame.Poseidon.MeshConstructionFactory">
+            <summary>
+            Converts a LiveMesh into a Mesh asynchronously
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.LooseVertexComparer">
+             <summary>
+             Compares vertices only based on position and uses
+             the == operator to let the vertices handle floating
+             point imprecision.
+            
+             Two vertices with different normals will appear
+             the same here, so use at your own risk.
+             </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonExtensions.Transform(UnityEngine.Bounds,UnityEngine.Matrix4x4)">
+            <summary>
+            Performs a transformation on a Bounds object given a transformation matrix.
+            </summary>
+            <param name="bounds"></param>
+            <param name="transform">the transformation matrix to apply</param>
+            <returns>the bounds that would exist if the original geometry it was constructed for was transformed
+            by the provided transformation matrix.</returns>
+            
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonMode">
+            <summary>
+            <para>
+            This PoseidonMode/Strategy allows you to specific whether or not you are using some of the more advanced features. 
+            </para>
+            <para>
+            In the future, this may support a `Hierarchical` mode, where the way that objects are configured in the Unity hierarchy makes a difference to how they carve one another, but that isn't built yet. 
+            </para>
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.PoseidonMode.Simple">
+            <summary>
+            Just a normal, everyday carve.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.PoseidonMode.Layered">
+            <summary>
+            Use the `Layers` feature to allow you to keep multi-layered Poseidon islands.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.CarveParameters">
+             <summary>
+             Allows you to specify how the Runtime carve will actually happen.
+            
+             Configuring this class is how you can get your carves to happen the way
+             you want them to happen.
+             </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.FrameTime">
+            <summary>
+            How much time (in milliseconds) should be devoted to the carve operation? 
+            Since these can take a decently long amount of time, we split 
+            the operation to only do a particular amount per frame. If you want to 
+            run the entire carve operation at once, feel free to leave this blank
+            or pass in <see cref="F:System.Single.PositiveInfinity"/>.
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.Filter">
+             <summary>
+             Given a particular <see cref="T:Cinderflame.Poseidon.PoseidonBase"/>, should it be carved? 
+             By default, all Poseidons will be included in this
+             initial version of the runtime carving. 
+             </summary>
+             <remarks>
+             Completely optional, but may be useful if trying to 
+             filter down a few Poseidons. Will likely go away
+             in a subsequent update.
+            
+             For now, more documentation should be available
+             on the Poseidon Documentation website.
+             </remarks>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.LogResults">
+            <summary>
+            Whether or not to log information about how many Poseidons
+            were carved and how long the entire operation took. 
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.AssembleTiming">
+             <summary>
+            
+             Allows you to specify when the "Assemble" phase occurs.
+             For more information, view the documentation for <see cref="T:Cinderflame.Poseidon.CarveParameters.AssemblePhaseTiming"/>
+             
+             </summary>
+             <seealso cref="T:Cinderflame.Poseidon.CarveParameters.AssemblePhaseTiming"/>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.Strategy">
+            <summary>
+            Allows you to specify whether or not you are using any
+            of the advanced features of Poseidon such as Layered Mode.
+            
+            If you want to use the `Layered` mode features, this is where you enable it for Runtime. 
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.CarveParameters.AssemblePhaseTiming">
+            <summary>
+            <para>
+            Let's say you're carving 50 objects together for the first time. If you're using `AssemblePhaseTiming.AllTogetherAtEndOfProcess`,
+            it will calculate the final output of all 50 objects, then, at the end, it will assemble all of the Poseidons and turn them
+            from our internal representations of meshes into the final products all at once. You'll basically "blink" and suddenly everything will be done after crunching through the numbers.
+            </para>
+            <para>
+            If you're using `AssemblePhaseTiming.ImmediatelyAfterEachCarve` (default), you'll basically see the items "pop" into completion one-by-one. As soon as we're done carving an item, we'll "assemble" it and turn it into a proper Unity mesh, then move on to the next item.  
+            </para>
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.AssemblePhaseTiming.ImmediatelyAfterEachCarve">
+            <summary>
+            Assemble the final GameObject after each carve completes
+            </summary>
+        </member>
+        <member name="F:Cinderflame.Poseidon.CarveParameters.AssemblePhaseTiming.AllTogetherAtEndOfProcess">
+            <summary>
+            Wait until every bit of the Poseidon Operation is complete before committing things to their final phase
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonOperation">
+            <summary>
+            Represents a running Poseidon Operation. 
+            
+            For the initial version, users are instructed to continue running the Operation
+            until it is complete. In subsequent versions, we may completely redo this class.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonOperation.RunFrame">
+            <summary>
+            Run the current frame of the Poseidon operation. 
+            </summary>
+            <returns>Whether or not we're finished carving. If we return true, we should
+            no longer keep running the operation.</returns>
+        </member>
+        <member name="P:Cinderflame.Poseidon.PoseidonOperation.Progress">
+            <summary>
+            From 0.0f - 1.0f, this value represents a view of the 
+            overall progress of the carving operation.
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.PoseidonOperation.Finished">
+            <summary>
+            Has this operation finished?
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PoseidonRuntime">
+            <summary>
+            Poseidon Runtime manages runtime support of Poseidons
+            for at least V1 of the process. We should under no circumstances
+            actually do anything at Runtime unless explicitly requested
+            by the user. 
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonRuntime.CarveEverything(System.Collections.Generic.IEnumerable{Cinderflame.Poseidon.PoseidonBase})">
+            <summary>
+            Immediately carves all passed in Poseidons against one another,
+            all on the same runtime frame.
+            <para>Given a specific list of Poseidons, this carves them 
+            all with one another. Since Poseidon is not meant to
+            run automatically at Runtime, it should be explicitly
+            controlled. This means that the Poseidons passed in here
+            will only intersect with other Poseidons passed in here.</para>
+            
+            <para>We filter out any duplicates and any poseidons that
+            don't have a base mesh. It is highly recommended that
+            these be made from prefabs.</para>
+            
+            <para>Any Poseidons not passed into this function will not
+            be carved against. Additionally, this function is simple
+            and will not look for children.</para>
+            </summary>
+            <param name="allPoseidons">All of the poseidons needed for carve operations</param>
+        </member>
+        <member name="M:Cinderflame.Poseidon.PoseidonRuntime.GetCarveOperation(System.Collections.Generic.IEnumerable{Cinderflame.Poseidon.PoseidonBase},Cinderflame.Poseidon.CarveParameters)">
+            <summary>
+            Creates a CarveOperation object to carve all passed in Poseidons
+            against another.
+            <para>Given a specific list of Poseidons, this carves them 
+            all with one another. Since Poseidon is not meant to
+            run automatically at Runtime, it should be explicitly
+            controlled. This means that the Poseidons passed in here
+            will only intersect with other Poseidons passed in here.</para>
+            <para>We filter out any duplicates and any poseidons that
+            don't have a base mesh. It is highly recommended that
+            these be made from prefabs.</para>
+            
+            <para>Any Poseidons not passed into this function will not
+            be carved against. Additionally, this function is simple
+            and will not look for children/nesting, etc.</para>
+            </summary>
+            <param name="allPoseidons">All of the poseidons needed for carve operations</param>
+            <param name="parameters">The various parameters that will be used for the carve operation itself.</param>
+            <returns>A <see cref="T:Cinderflame.Poseidon.PoseidonOperation"/> that must be manually run to completion.</returns>
+        </member>
+        <member name="T:Cinderflame.Poseidon.IdentifyStage">
+             <summary>
+             A stage that determines which Poseidons are good for continuing to the
+             next stages (null Poseidons are culled here).
+            
+             Additionally, this stage prepares all Poseidons by recomputing sisters
+             one last time, just in case.
+             </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.CoroutineStage`1.RunEnumerator">
+            <summary>
+            The coroutine that will be running in order to 
+            actually do the dirty work for a particular stage.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.ExecutionTimeExceededException">
+            <summary>
+            Throw this when a stage has exceeded the allotted maxExecutionTime and
+            isn't yet finished doing its work.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.OperationAbortedException">
+            <summary>
+            Throw this when a stage has decided that the entire 
+            rest of the pipeline should be aborted. This might 
+            be, for example, if there is nothing to operate on
+            and there's no sense in continuing to pipe through
+            stages that won't have any behaviour.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.RebuildingStage`1">
+             <summary>
+             Base class for stages involved in rebuilding poseidons once it has
+             been determined that they need rebuilding.
+            
+             Each stage inputs an object of type T, and outputs a corresponding
+             object of type T.  (In theory, input and output types could be
+             different, but in practice the types of stages that were needed always
+             output the same type of thing as the thing they were given, so this
+             model was chosen to simplify things.)
+             </summary>
+             <typeparam name="T">The type of input/output of the stage.</typeparam>
+        </member>
+        <member name="M:Cinderflame.Poseidon.RebuildingStage`1.Initiate(`0,System.Single)">
+            <summary>
+            Called to initiate this stage.  If the stage exceeds its max
+            execution time, an <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/> will
+            be thrown.
+            </summary>
+            <param name="input">The stage input, unique to the type of stage.
+            </param>
+            <param name="maxExecutionTime">The maximum amount of time,
+            in seconds, that the execution is allowed to proceed before
+            having to halt.</param>
+            <returns>The stage output, based on what kind of stage it is.
+            </returns>
+        </member>
+        <member name="M:Cinderflame.Poseidon.RebuildingStage`1.Setup(`0)">
+            <summary>
+            Called the first time to let a stage setup any
+            information it might need for this current session
+            of a stage runner. If a stage doesn't complete, 
+            subsequent continuations will not call Setup.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.RebuildingStage`1.Run(System.Single)">
+            <summary>
+            Called to continue running this stage.  If the stage exceeds its max
+            execution time, an <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/> will
+            be thrown.
+            </summary>
+            <param name="remainingTime">The maximum amount of time,
+            in seconds, that the execution is allowed to proceed before
+            having to halt.</param>
+            <returns>The stage output, based on what kind of stage it is.
+            </returns>
+        </member>
+        <member name="M:Cinderflame.Poseidon.RebuildingStage`1.Run">
+             <summary>
+             Called when the stage has to perform its work.
+            
+             If the stage exceeds its max
+             execution time, an <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/>
+             should be thrown.
+             </summary>
+             <returns>The output of the stage.  Optionally, the stage
+             can throw an exception that must be caught by the caller.</returns>
+        </member>
+        <member name="M:Cinderflame.Poseidon.RebuildingStage`1.CheckExecutionTime">
+            <summary>
+            Checks to see if <see cref="F:Cinderflame.Poseidon.RebuildingStage`1.maxExecutionTime"/> has been exceeded
+            during the execution of this stage.  If so, this method throws an
+            <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/>.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.RebuildPair">
+            <summary>
+            Represents a pair of Poseidons that are currently being built. 
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.StageRunner`1">
+             <summary>
+             Encapsulates a state machine that runs through a number of CSG operation
+             stages to fully bring the scene up-to-date with respect to the CSG cuts
+             needed.
+            
+             The state machine keeps track of the current stage and allows for
+             partial (time-sliced) execution of stages.
+             See <see cref="M:Cinderflame.Poseidon.StageRunner`1.Execute(`0,System.Single)"/>
+             
+             </summary>
+             <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cinderflame.Poseidon.StageRunner`1.UnconstrainedByTime">
+            <summary>
+            All runners can technically run enough steps to 
+            run out of time. However... some operations are 
+            too in depth to throw time exceptions and the 
+            entire runner should run to completion. 
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.StageRunner`1.OverallProgress">
+            <summary>
+            Returns a 0.0 - 1.0 percent progress of the entire chain of stages
+            being run by this runner.
+            </summary>
+        </member>
+        <member name="P:Cinderflame.Poseidon.StageRunner`1.CurrentStage">
+            <summary>
+            The stage that is currently actively executing or paused.
+            </summary>
+        </member>
+        <member name="M:Cinderflame.Poseidon.StageRunner`1.Chain(Cinderflame.Poseidon.RebuildingStage{`0})">
+            <summary>
+            Chains a stage onto the end of the chain of stages that will be run
+            by this runner, returning the runner itself afterwards.
+            </summary>
+            <param name="stage">the stage to place at the end of the
+            chain.</param>
+            <returns>The same StageRunner object</returns>
+        </member>
+        <member name="M:Cinderflame.Poseidon.StageRunner`1.Execute(`0,System.Single)">
+             <summary>
+             Called to execute this flow of stages.  If the total flow exceeds
+             its max execution time, an
+             <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/> will be thrown.
+            
+             Execute can be called after
+             <see cref="T:Cinderflame.Poseidon.ExecutionTimeExceededException"/> is
+             thrown, and the stages will continue where they left off gracefully.
+            
+             If the last stage in the flow finishes in time, no exception will be
+             thrown, and instead the output of the last stage will be returned.
+             </summary>
+             <param name="input">The stage input, unique to the type of stage.
+             </param>
+             <param name="maxExecutionTime">The maximum amount of time,
+             in milliseconds, that the execution is allowed to proceed before
+             having to halt.</param>
+             
+             <returns>The stage output, based on what kind of stage it is.
+             If a stage returns 'null' operation is halted for the current runner 
+             and reset back to the beginning. This is in order to early-exit in case
+             we don't need to proceed with any operations.
+             </returns>
+        </member>
+        <member name="T:Cinderflame.Poseidon.PrepareStage">
+            <summary>
+            A small stage to make sure that we have the right octrees
+            created when we'll need them later in the process.
+            </summary>
+        </member>
+        <member name="T:Cinderflame.Poseidon.Progression">
+            <summary>
+            A raw interface layer so that we can talk to various
+            kinds of progressions, not just the one that is the 
+            main progress bar in UnityEditor. This will be useful
+            if we ever decide to support runtime progression.
+            </summary>
+        </member>
+    </members>
+</doc>
