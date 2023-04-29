@@ -4,6 +4,7 @@ using HurricaneVR.Framework.Core.ScriptableObjects;
 using HurricaneVR.Framework.Core.Utils;
 using HurricaneVR.Framework.Shared;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace HurricaneVR.Framework.Components
 {
@@ -115,6 +116,10 @@ namespace HurricaneVR.Framework.Components
         private float _detectionTimer;
         private float _lastClosedSFXTime;
         private float _lastOpenedSFXTime;
+
+        // 在HVRRotationTracker类中添加事件
+        public UnityEvent DoorOpenedE = new UnityEvent(); // 门打开事件
+        public UnityEvent DoorClosedE = new UnityEvent(); // 门关闭事件
 
         public virtual void Start()
         {
@@ -309,6 +314,7 @@ namespace HurricaneVR.Framework.Components
         // ReSharper disable Unity.PerformanceAnalysis
         protected virtual void OnDoorClosed()
         {
+            DoorClosedE.Invoke();
             if (VerboseLogging)
                 Debug.Log($"OnDoorClosed");
 
@@ -318,6 +324,7 @@ namespace HurricaneVR.Framework.Components
         // ReSharper disable Unity.PerformanceAnalysis
         protected virtual void OnDoorOpened()
         {
+            DoorOpenedE.Invoke();
             if (VerboseLogging)
                 Debug.Log($"OnDoorOpened");
         }

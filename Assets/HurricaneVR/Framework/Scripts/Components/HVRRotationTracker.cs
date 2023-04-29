@@ -110,6 +110,34 @@ namespace HurricaneVR.Framework.Components
                 }
             }
 
+            // 添加一个新的条件以检测门是否被打开或关闭
+            // if (Steps > 1)
+            // {
+            //     bool isOpening = !Mathf.Approximately(stepAngle, _previousAngle) && stepAngle > _previousAngle;
+            //     bool isClosing = !Mathf.Approximately(stepAngle, _previousAngle) && stepAngle < _previousAngle;
+
+            //     if (isOpening)
+            //     {
+            //         DoorOpened.Invoke();
+            //     }
+            //     else if (isClosing)
+            //     {
+            //         DoorClosed.Invoke();
+            //     }
+
+            //     _previousAngle = stepAngle;
+            // }
+            // if (ClampedAngle >= 1 && !_doorOpened)
+            // {
+            //     _doorOpened = true;
+            //     DoorOpened.Invoke(); // 触发门打开事件
+            // }
+            // else if (ClampedAngle < 1 && _doorOpened)
+            // {
+            //     _doorOpened = false;
+            //     DoorClosed.Invoke(); // 触发门关闭事件
+            // }
+
             _angleFromStart = Angle;
             _clampedAngle = ClampedAngle;
         }

@@ -12,7 +12,7 @@ public class LeftTime : MonoBehaviour
     public TextMeshProUGUI message2; // 添加message2的引用
     public Image[] hearts; // 创建一个Image类型的数组，用于存储红心对象
     private int remainingHearts; // 创建一个整数变量，用于存储剩余的红心数量
-    private float timer = 10f;
+    private float timer = 20f;
 
     public Vector3 initialPosition; // 用于存储TechDemoXRRig的初始位置
     public string initialScene; // 添加一个变量来存储初始场景名称
@@ -44,7 +44,7 @@ public class LeftTime : MonoBehaviour
                 {
                     remainingHearts--;
                     hearts[remainingHearts].enabled = false;
-                    timer = 10f;
+                    timer = 20f;
                     SetNewMessages(); // 在倒计时重置时设置message1和message2
                 }
 
@@ -52,8 +52,10 @@ public class LeftTime : MonoBehaviour
                 {
                     Debug.Log("All hearts are gone, resetting the scene.");
                     // 重置整个场景，例如加载当前场景
-                    SceneManager.LoadScene(GameManager.Instance.initialScene); // 加载初始场景
-                    GameManager.Instance.isGameStarted = false;
+                    // SceneManager.LoadScene(GameManager.Instance.initialScene); // 加载初始场景
+                    // GameManager.Instance.isGameStarted = false;
+                    int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+                    SceneManager.LoadScene(currentSceneIndex); // 重新加载当前场景
                     // 在场景重置后，重新激活开始按钮和其他对象
                     ShowStartButtonAndObjects();
                     this.enabled = false; // 禁用LeftTime脚本
@@ -90,30 +92,33 @@ public class LeftTime : MonoBehaviour
         }
     }
 
-    public void UpdateScore(bool isCorrectDoor)
+    public void AddScore(int points)
     {
-        if (isCorrectDoor)
+        score += points;
+        scoreText.text = $"{score}";
+    }
+
+    public void AddHeart()
+    {
+        if (remainingHearts < 3)
         {
-            score += 10;
-            if (remainingHearts < hearts.Length)
-            {
-                remainingHearts++;
-                hearts[remainingHearts - 1].enabled = true;
-                timer = 10f;
-                SetNewMessages(); // 在倒计时重置时设置message1和message2
-            }
+            hearts[remainingHearts].enabled = true;
+            remainingHearts++;
         }
-        else
+
+        timer = 20f;
+        SetNewMessages(); // 在倒计时重置时设置message1和message2
+    }
+
+    public void ReduceHeart()
+    {
+        if (remainingHearts > 0)
         {
             remainingHearts--;
             hearts[remainingHearts].enabled = false;
-            timer = 10f;
+            timer = 20f;
             SetNewMessages(); // 在倒计时重置时设置message1和message2
         }
-
-        scoreText.text = $"{score}";
-        // 调用GlobalVariables的updateTotalScore方法并传入结果
-        GlobalVariables.Instance.UpdateTotalScore(score);
     }
 
 }

@@ -39,4 +39,23 @@ public class GlobalVariables : MonoBehaviour
 
         OnValuesAssigned?.Invoke();
     }
+
+    public Color GetColorByName(string colorName)
+    {
+        switch (colorName.ToLower())
+        {
+            case "red":
+                return Color.red;
+            case "green":
+                return Color.green;
+            case "yellow":
+                return Color.yellow;
+            case "blue":
+                return Color.blue;
+            default:
+                Debug.LogError($"Invalid color name: {colorName}");
+                return Color.clear;
+        }
+    }
+
 }
