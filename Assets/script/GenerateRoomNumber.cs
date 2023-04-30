@@ -181,7 +181,7 @@ public class GenerateRoomNumber : MonoBehaviour
             if (leftTime)
             {
                 leftTime.AddScore(10); // 增加分数
-                leftTime.AddHeart(); // 增加红心
+                // leftTime.AddHeart(); // 增加红心
             }
         }
         else

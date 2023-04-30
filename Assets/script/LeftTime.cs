@@ -96,6 +96,8 @@ public class LeftTime : MonoBehaviour
     {
         score += points;
         scoreText.text = $"{score}";
+        timer = 20f;
+        SetNewMessages(); // 重置message1、message2和倒计时
     }
 
     public void AddHeart()
@@ -105,9 +107,6 @@ public class LeftTime : MonoBehaviour
             hearts[remainingHearts].enabled = true;
             remainingHearts++;
         }
-
-        timer = 20f;
-        SetNewMessages(); // 在倒计时重置时设置message1和message2
     }
 
     public void ReduceHeart()
@@ -117,7 +116,7 @@ public class LeftTime : MonoBehaviour
             remainingHearts--;
             hearts[remainingHearts].enabled = false;
             timer = 20f;
-            SetNewMessages(); // 在倒计时重置时设置message1和message2
+            SetNewMessages(); // 重置message1、message2和倒计时
         }
     }
 

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
             initialScene = SceneManager.GetActiveScene().name; // 在Awake方法中设置初始场景名称
         }
         else
@@ -43,17 +43,6 @@ public class GameManager : MonoBehaviour
             obj.SetActive(false);
         }
 
-        // 获取 DoorSpawner 组件并调用 SpawnDoor() 方法
-        // DoorSpawner doorSpawner = FindObjectOfType<DoorSpawner>();
-        // if (doorSpawner != null)
-        // {
-        //     doorSpawner.SpawnDoor();
-        // }
-        // else
-        // {
-        //     Debug.LogError("DoorSpawner not found in the scene.");
-        // }
-
         // 获取 LeftTime 组件并启用它
         LeftTime leftTime = FindObjectOfType<LeftTime>();
         if (leftTime != null)
@@ -66,4 +55,6 @@ public class GameManager : MonoBehaviour
         }
     }
 }
+
+
 
